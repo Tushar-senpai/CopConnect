@@ -16,7 +16,7 @@ const PoliceReportForm = () => {
     victimContactInfo: "",
     description: "",
     additionalInfo: "",
-    evidence: null,
+    media: [],
     status: "Open",
     priority: "Medium",
   });
@@ -32,17 +32,16 @@ const PoliceReportForm = () => {
 
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files);
-  
+
     const newFiles = files.map((file) => ({
       id: Math.random().toString(36).substr(2, 9),
       file,
       type: file.type.startsWith("image/") ? "image" : "video",
       preview: URL.createObjectURL(file),
     }));
-  
+
     setMediaFiles((prev) => [...prev, ...newFiles]);
   };
-  
 
   const removeFile = (fileId) => {
     setMediaFiles(mediaFiles.filter((file) => file.id !== fileId));
@@ -50,25 +49,25 @@ const PoliceReportForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const form = new FormData();
-  
+
       // Append all text fields
       Object.entries(formData).forEach(([key, value]) => {
         form.append(key, value);
       });
-  
+
       // Append all media files (images/videos)
       mediaFiles.forEach((media) => {
         form.append("media", media.file); // "media" matches multer field
       });
-  
+
       const token = sessionStorage.getItem("token");
-  
+
       console.log("📤 Sending form data:", formData);
       console.log("📤 Media files count:", mediaFiles.length);
-  
+
       const response = await fetch("http://localhost:5001/api/cases/fileCase", {
         method: "POST",
         headers: {
@@ -76,12 +75,26 @@ const PoliceReportForm = () => {
         },
         body: form,
       });
+
+      
+      // const text = await response.text();
+      // console.error("🪵 Raw response text:", text);
+      // const result = await response.json();
+
+      const text = await response.text(); // Read response as text
+      console.log("🪵 Raw response text:", text);
   
-      const result = await response.json();
-  
+      let result;
+      try {
+        result = JSON.parse(text); // Try to parse as JSON
+      } catch (jsonError) {
+        console.warn("⚠️ Response is not JSON, raw text:", text);
+      }
+
+
       if (response.ok) {
         alert("✅ Report submitted successfully!");
-  
+
         // Reset form fields
         setFormData({
           caseNumber: "",
@@ -94,11 +107,11 @@ const PoliceReportForm = () => {
           victimContactInfo: "",
           description: "",
           additionalInfo: "",
-          evidence: "",
+          media: "",
           status: "Open",
           priority: "Medium",
         });
-  
+
         setMediaFiles([]);
       } else {
         alert(result.message || "❌ Submission failed.");
@@ -109,7 +122,6 @@ const PoliceReportForm = () => {
       alert("An error occurred while submitting the report.");
     }
   };
-  
 
   return (
     <>
@@ -262,7 +274,7 @@ const PoliceReportForm = () => {
                   </label>
                   <textarea
                     name="evidence"
-                    value={formData.evidence}
+                    // value={formData.evidence}
                     onChange={handleChange}
                     placeholder="Describe the evidence collected..."
                     className="w-full p-3 mt-4 bg-gray-50 border border-blue-400 rounded-lg text-gray-800 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -279,8 +291,10 @@ const PoliceReportForm = () => {
                             </span>
                           </div>
                           <input
+                          name="media"
                             type="file"
                             accept="image/*"
+                            value={formData.media}
                             multiple
                             className="hidden"
                             onChange={handleFileUpload}
@@ -339,8 +353,6 @@ const PoliceReportForm = () => {
                     )}
                   </div>
                 </div>
-
-      
 
                 {/* Status and Priority */}
                 <div className="col-span-2 md:grid md:grid-cols-2 gap-6">

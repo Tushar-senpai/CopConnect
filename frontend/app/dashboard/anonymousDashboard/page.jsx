@@ -110,8 +110,8 @@ const AnonymousDashboard = () => {
 
   const privacyTips = [
     "Never include your personal information in tips",
-    "Use public WiFi or VPN for additional privacy",
-    "Clear your browser history after submission",
+    "Your anonymity is maintained",
+    "We will update ur tip",
   ];
 
   const recentUpdates = [

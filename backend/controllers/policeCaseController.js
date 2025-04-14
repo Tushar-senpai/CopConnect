@@ -17,14 +17,11 @@ export const fileCase = async (req, res) => {
       priority
     } = req.body;
 
-    // Cloudinary uploaded file URL (if any)
-    const media = req.file?.path || ''; // 'path' is the Cloudinary-hosted URL
+    console.log("📥 Form data:", req.body);
+    console.log("📸 Uploaded files:", req.files);
 
-    console.log("📥 POLICECASECONTROLLER RECEIVED:", {
-      ...req.body,
-      fileUploaded: !!req.file,
-      mediaURL: media,
-    });
+    // Get URLs from all uploaded files (if any)
+    const mediaURLs = req.files ? req.files.map(file => file.path) : [];
 
     // Required fields check
     if (
@@ -53,7 +50,7 @@ export const fileCase = async (req, res) => {
       victimName,
       victimContactInfo,
       description,
-      evidence: media, // save Cloudinary file URL under "evidence"
+      media: mediaURLs, // Save all Cloudinary URLs in the media field
       additionalInfo,
       status,
       priority
@@ -70,12 +67,50 @@ export const fileCase = async (req, res) => {
   }
 };
 
+export const searchCases = async (req, res) => {
+  const { type, query } = req.query;
+
+  if (!type || !query) {
+    return res.status(400).json({ error: 'Please provide both type and query parameters' });
+  }
+
+  let searchCriteria = {};
+
+  if (type === 'caseNumber') {
+    searchCriteria = { caseNumber: query };
+  } else if (type === 'victimName') {
+    searchCriteria = { victimName: { $regex: query, $options: 'i' } };
+  } else if (type === 'victimContactInfo') {
+    searchCriteria = { victimContactInfo: { $regex: query, $options: 'i' } };
+  } else {
+    return res.status(400).json({ error: 'Invalid search type' });
+  }
+
+  try {
+    const results = await PoliceCase.find(searchCriteria);
+    res.status(200).json(results);
+  } catch (error) {
+    console.error("❌ Error searching cases:", error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+export const getOpenCases = async (req, res) => {
+  try {
+    const openCases = await PoliceCase.find({ status: 'Open' }).limit(4).sort({ dateTime: -1 });
+    res.status(200).json(openCases);
+  } catch (error) {
+    console.error("Error fetching open cases:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const getAllCases = async (req, res) => {
   try {
-    const cases = await PoliceCase.find().sort({ dateTime: -1 });
+    const cases = await PoliceCase.find();
     res.status(200).json(cases);
   } catch (error) {
-    console.error("Error fetching cases:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error fetching cases:', error);
+    res.status(500).json({ message: 'Server Error' });
   }
 };

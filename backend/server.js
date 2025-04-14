@@ -1,5 +1,7 @@
-import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config();
+console.log("✅ Loaded ENV:", process.env.CLOUDINARY_API_KEY);
+import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import http from 'http';
@@ -9,7 +11,7 @@ import reportRoutes from './routes/reportRoutes.js';
 import caseRoutes from './routes/policeCaseRoutes.js';
 
 
-dotenv.config();
+
 
 const app = express();
 const server = http.createServer(app); // Create HTTP server

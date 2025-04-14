@@ -1,34 +1,20 @@
 import express from 'express';
-import { fileCase, getAllCases } from '../controllers/policeCaseController.js';
+import { fileCase, searchCases, getOpenCases, getAllCases } from '../controllers/policeCaseController.js';
 import { protect } from '../middleware/authMiddleware.js';
-import cloudinary from '../utils/cloudinary.js';
-import parser from '../middleware/multer.js';
-
-
+import upload from '../middleware/multer.js';
 
 const router = express.Router();
 
-// File a new police case with media upload support
-// router.post(
-//   '/fileCase',
-//   protect(['police']),
-//   upload.array('media', 10), // handles up to 10 files named 'media'
-//   fileCase
-// );
-// router.post('/fileCase', parser.single('evidence'), fileCase);
+// Use your controller function with upload middleware
+router.post("/fileCase", upload.array("media", 5), fileCase);
 
-router.post(
-  "/fileCase",
-  protect(['police']),               // if you're protecting the route
-  parser.array("media", 5),  // Multer handles up to 5 files from "media" field
-  fileCase                   // then controller handles logic
-);
+router.get('/searchCase', protect(['police', 'admin']), searchCases);
 
-// Get all filed police cases
-router.get(
-  '/getCases',
-  protect(['police', 'admin']),
-  getAllCases
-);
+router.get('/getAllCases', protect(['police', 'admin']), getAllCases);
+
+router.get('/getOpenCases', protect(['police', 'admin']), getOpenCases);
+
+// Route to get all cases
+// router.get('/getCases', protect(['police', 'admin']), getAllCases);
 
 export default router;

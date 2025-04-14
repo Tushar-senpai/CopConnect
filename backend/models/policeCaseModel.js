@@ -42,8 +42,8 @@ const PoliceCaseSchema = new mongoose.Schema({
     type: String, // optional field, if any notes about the evidence
   },
   media: {
-    type: [String], // ✅ Array of Cloudinary URLs for images/videos
-    default: [],
+    type: [String],  
+    default: []      
   },
   additionalInfo: {
     type: String,
