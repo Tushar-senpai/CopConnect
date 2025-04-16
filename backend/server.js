@@ -10,6 +10,7 @@ import userRoutes from './routes/userRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import policeCaseRoutes from './routes/policeCaseRoutes.js';
 import anonymousRoutes from './routes/anonymousRoutes.js'
+import chatbotRoutes from './routes/chatbotRoutes.js';
 
 
 
@@ -50,6 +51,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/cases', policeCaseRoutes);
 app.use('/api/anonymous', anonymousRoutes)
+app.use('/api/chatbot', chatbotRoutes);
 
 
 

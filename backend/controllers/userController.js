@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, phone, badgeNumber, adminId, password, role } = req.body;
+    const { name, phone, badgeNumber, password, role } = req.body;
 
     if (role === 'anonymous') {
       return res.status(400).json({ message: 'Anonymous users do not need to register.' });
@@ -26,13 +26,6 @@ export const registerUser = async (req, res) => {
       newUser = new User({ name, phone, role });
     } 
     
-    else if (role === 'admin') {
-      if (!adminId || !password) {
-        return res.status(400).json({ message: 'Admin must provide admin ID and password.' });
-      }
-      const hashedPassword = await bcrypt.hash(password, 10);
-      newUser = new User({ adminId, password: hashedPassword, role });
-    }
 
     await newUser.save();
     const token = jwt.sign({ id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -70,16 +63,8 @@ export const loginUser = async (req, res) => {
   
         user = await User.findOne({ name, phone });
       } 
+
       
-      else if (role === 'admin') {
-        const { adminId, password } = req.body;
-        if (!adminId || !password) return res.status(400).json({ message: 'Admin ID and password are required' });
-  
-        user = await User.findOne({ adminId });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-          return res.status(401).json({ message: 'Invalid credentials' });
-        }
-      }
   
       if (!user) {
         return res.status(401).json({ message: 'Invalid credentials' });

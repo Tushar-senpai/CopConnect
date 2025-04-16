@@ -7,7 +7,7 @@ const router = express.Router();
 // Route to file a report (Only Citizens can file reports)
 router.post('/fileReport', protect(['citizen']), fileReport);
 
-// Route to get all reports (Only Admins & Police can access)
-router.get('/getReports', protect(['police', 'admin']), getReports);
+// Route to get all reports (Only Police can access)
+router.get('/getReports', protect(['police']), getReports);
 
 export default router;

@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: '/api/chatbot/chatResponse',
+        destination: 'http://localhost:5001/api/chatbot/chatResponse', // Your Express backend endpoint
+      },
+    ];
+  },
 };
 
 export default nextConfig;

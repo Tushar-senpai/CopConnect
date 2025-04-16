@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
     // name for police and citizen
-  name: { type: String, required: function() { return this.role !== 'admin'; } },
+  name: { type: String},
 
   // phone for citizen
   phone: { type: String, required: function() { return this.role === 'citizen'; } },
@@ -10,14 +10,10 @@ const UserSchema = new mongoose.Schema({
   // badge number only for police
   badgeNumber: { type: String, required: function() { return this.role === 'police'; }},
 
-  // only for admin
-  adminId: { type: String, required: function() { return this.role === 'admin'; }},
-
-  // Only Admin requires a password
-  password: { type: String, required: function() { return this.role === 'admin'; } },  
+  password: { type: String },  
   role: { 
     type: String, 
-    enum: ['police', 'citizen', 'admin', 'anonymous'], 
+    enum: ['police', 'citizen', 'anonymous'], 
     required: true 
   }
 }, { timestamps: true });

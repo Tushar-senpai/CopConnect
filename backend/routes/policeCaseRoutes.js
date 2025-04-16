@@ -8,13 +8,13 @@ const router = express.Router();
 // Use your controller function with upload middleware
 router.post("/fileCase", upload.array("media", 5), fileCase);
 
-router.get('/searchCase', protect(['police', 'admin']), searchCases);
+router.get('/searchCase', protect(['police']), searchCases);
 
-router.get('/getAllCases', protect(['police', 'admin']), getAllCases);
+router.get('/getAllCases', protect(['police']), getAllCases);
 
-router.get('/getOpenCases', protect(['police', 'admin']), getOpenCases);
+router.get('/getOpenCases', protect(['police']), getOpenCases);
 
 // Route to get all cases
-// router.get('/getCases', protect(['police', 'admin']), getAllCases);
+// router.get('/getCases', protect(['police'), getAllCases);
 
 export default router;

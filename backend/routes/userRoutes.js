@@ -8,9 +8,6 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 
 // Protected Routes
-router.get('/admin', protect(['admin']), (req, res) => {
-  res.json({ message: 'Welcome, Admin' });
-});
 
 router.get('/police', protect(['police']), (req, res) => {
   res.json({ message: 'Welcome, Police Officer' });

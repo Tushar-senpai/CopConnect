@@ -15,14 +15,13 @@ const Login = () => {
     name: "",
     phone: "",
     badgeNumber: "",
-    adminId: "",
     password: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!role || !["police", "citizen", "admin", "anonymous"].includes(role)) {
+    if (!role || !["police", "citizen", "anonymous"].includes(role)) {
       router.push("/");
     }
     if (role === "anonymous") {
@@ -135,7 +134,7 @@ const Login = () => {
                     />
                   </>
                 )}
-                {role === "admin" && (
+                {role === "community" && (
                   <>
                     <input
                       type="text"
