@@ -8,8 +8,8 @@ import http from 'http';
 import { Server } from 'socket.io';
 import userRoutes from './routes/userRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
-import caseRoutes from './routes/policeCaseRoutes.js';
-
+import policeCaseRoutes from './routes/policeCaseRoutes.js';
+import anonymousRoutes from './routes/anonymousRoutes.js'
 
 
 
@@ -48,7 +48,8 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/reports', reportRoutes);
-app.use('/api/cases', caseRoutes);
+app.use('/api/cases', policeCaseRoutes);
+app.use('/api/anonymous', anonymousRoutes)
 
 
 

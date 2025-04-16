@@ -49,7 +49,7 @@ const AdminDashboard = () => {
         {/* Header */}
         <div className="text-white">
           <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-            Admin Dashboard
+            Community
           </h1>
         </div>
 

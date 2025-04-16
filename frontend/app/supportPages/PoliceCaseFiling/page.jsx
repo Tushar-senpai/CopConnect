@@ -69,7 +69,7 @@ const PoliceReportForm = () => {
       console.log("📤 Media files count:", mediaFiles.length);
 
       const response = await fetch("http://localhost:5001/api/cases/fileCase", {
-        method: "POST",
+        method: "POST", 
         headers: {
           Authorization: `Bearer ${token}`, // Do not set Content-Type, browser does it for FormData
         },

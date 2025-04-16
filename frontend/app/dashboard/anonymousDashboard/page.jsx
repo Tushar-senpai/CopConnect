@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import Webcam from "react-webcam";
 import { Button } from "components/ui/button";
-import CameraCapture from "@/app/HelpingComponents/cameraCapture";
+import CameraCapture from "@/app/HelpingComponents/CameraCapture";
 import UploadEvidence from "@/app/HelpingComponents/UploadEvidence";
 import TrackTips from "@/app/HelpingComponents/TrackTips";
 import Link from "next/link";
@@ -110,8 +110,8 @@ const AnonymousDashboard = () => {
 
   const privacyTips = [
     "Never include your personal information in tips",
-    "Your anonymity is maintained",
-    "We will update ur tip",
+    "No personal data is stored",
+    "We will update your tip status",
   ];
 
   const recentUpdates = [
