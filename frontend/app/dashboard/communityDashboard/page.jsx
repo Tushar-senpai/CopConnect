@@ -1,11 +1,12 @@
 'use client'
-import { Shield, MessageCircle, Users, Newspaper, ChevronRight, Bot, ArrowLeft, Bell, Search } from 'lucide-react';
+import { Shield, Users, Newspaper, ChevronRight, Bot, ArrowLeft, Bell, Search, MapIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
 import PublicChatSection from '@/app/HelpingComponents/PublicChatSection';
 
 import FaqSection from '@/app/HelpingComponents/FaqSection';
+import MapStations from '@/app/HelpingComponents/MapStations';
 
 export default function CommunityDashboard() {
   const [activeSection, setActiveSection] = useState('chatbot');
@@ -13,6 +14,8 @@ export default function CommunityDashboard() {
   const menuItems = [
     { id: 'FAQ', label: 'Navigating CopConnect', icon: Bot, description: 'Get answers to your questions' },
     { id: 'PublicChatMessage', label: 'Public Chat', icon: Users, description: 'Share your thoughts with the community' },
+    { id: 'Map', label: 'Stations near you', icon: MapIcon, description: 'Find your nearest station' },
+    
   ];
 
   const renderContent = () => {
@@ -21,6 +24,8 @@ export default function CommunityDashboard() {
         return <FaqSection />;
       case 'PublicChatMessage':
         return <PublicChatSection />;
+      case 'Map':
+        return <MapStations />;
       default:
         return <FaqSection />;
     }

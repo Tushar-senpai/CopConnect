@@ -9,6 +9,12 @@ const faqSchema = new mongoose.Schema({
   answer: {
     type: String,
     required: true,
+  },
+  section: {
+    type: String,
+    enum: ['citizen', 'police', 'general'],
+    default: 'general',
+    required: true,
   }
 }, { timestamps: true });
 

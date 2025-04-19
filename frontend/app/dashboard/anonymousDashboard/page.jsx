@@ -178,8 +178,7 @@ const AnonymousDashboard = () => {
           <div className="flex items-center space-x-2">
             <AlertCircle className="h-5 w-5" />
             <span className="font-semibold">
-              Important: This portal is for anonymous tips only. For
-              emergencies, call 100.
+              Important: People filing false tips will have action taken against them.
             </span>
           </div>
         </div>

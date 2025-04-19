@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Footer from "../HelpingComponents/Footer";
+
 import Navbar from "../HelpingComponents/Navbar";
 
 const Login = () => {

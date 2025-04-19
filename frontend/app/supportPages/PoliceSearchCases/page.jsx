@@ -71,12 +71,12 @@ const PoliceSearchCases = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         {/* Back button */}
-        {/* <div>
-          <a href="/police-dashboard" className="inline-flex items-center text-blue-300 hover:text-blue-100 transition-colors">
+        <div>
+          <a href="/dashboard/policeDashboard" className="inline-flex items-center text-blue-300 hover:text-blue-100 transition-colors">
             <ArrowLeft className="h-5 w-5 mr-2" />
             <span>Back to Dashboard</span>
           </a>
-        </div> */}
+        </div>
 
         {/* Search Form */}
         <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">

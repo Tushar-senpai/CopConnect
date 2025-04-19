@@ -1,10 +1,12 @@
-// backend/controllers/faqController.js
 import FAQ from '../models/faqModel.js';
 
-// Get all FAQs
+// Get all FAQs (optionally filtered by section)
 export const getFAQs = async (req, res) => {
+  const { section } = req.query;
+
   try {
-    const faqs = await FAQ.find();
+    const query = section ? { section } : {};
+    const faqs = await FAQ.find(query);
     res.status(200).json(faqs);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch FAQs' });

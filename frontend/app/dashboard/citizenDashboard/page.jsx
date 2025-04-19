@@ -103,23 +103,6 @@ const CitizenDashboard = () => {
           </div>
         </div>
 
-        {/* Nearest Station Card (Moved below and larger) */}
-        <div className="bg-gradient-to-r from-teal-600 to-cyan-700 rounded-xl p-6 text-white border border-blue-400/20 hover:shadow-lg hover:shadow-blue-500/20 transform hover:-translate-y-1 transition-all duration-300 lg:col-span-3">
-          <div className="flex items-center space-x-4">
-            <div className="bg-white/10 p-3 rounded-lg">
-              <MapPin className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold">Nearest Station</h2>
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <MapStations />{" "}
-            {/* Your MapStations component directly rendered here */}
-          </div>
-        </div>
-
         {/* Main Content */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Emergency Contacts */}
