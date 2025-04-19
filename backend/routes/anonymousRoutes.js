@@ -16,6 +16,4 @@ router.patch("/tips/:id", markTipAsReviewed);
 router.get("/tips/track/:anonymousId", getTipsByAnonymousId);
 
 
-
-
 export default router;

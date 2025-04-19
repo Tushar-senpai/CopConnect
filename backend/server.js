@@ -9,10 +9,10 @@ import { Server } from 'socket.io';
 import userRoutes from './routes/userRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import policeCaseRoutes from './routes/policeCaseRoutes.js';
-import anonymousRoutes from './routes/anonymousRoutes.js'
-import chatbotRoutes from './routes/chatbotRoutes.js';
-
-
+import anonymousRoutes from './routes/anonymousRoutes.js';
+import faqRoutes from './routes/faqRoutes.js';
+import PublicChatMessage from './models/publicChatModel.js';
+import PublicChatMessageRoutes from './routes/publicChatRoutes.js';
 
 const app = express();
 const server = http.createServer(app); // Create HTTP server
@@ -27,20 +27,49 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI,)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Socket.IO - Handle new client connections
+// Socket.IO - Handle new client connections for chat
 io.on("connection", (socket) => {
   console.log("A client connected:", socket.id);
+
+  // Join a room and send its history
+  socket.on("joinRoom", async (room) => {
+    socket.join(room);
+    console.log(`Client ${socket.id} joined room: ${room}`);
+
+    try {
+      const messages = await PublicChatMessage.find({ room }).sort({ createdAt: 1 }).limit(100);
+      socket.emit("chatHistory", messages);
+    } catch (err) {
+      console.error("Error fetching chat history:", err);
+    }
+  });
+
+  // Listen for new public messages
+  socket.on("publicMessage", async (messageData) => {
+    const { username, text, room } = messageData;
+
+    try {
+      console.log("Received public message in server.js");
+      const newMessage = new PublicChatMessage({ username, text, room });
+      await newMessage.save();
+
+      // Broadcast the message to all clients in the same room
+      io.to(room).emit("newPublicMessage", newMessage);
+    } catch (err) {
+      console.error("Error saving message:", err);
+    }
+  });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected:", socket.id);
   });
 });
 
-// Middleware to attach io instance to requests
+// Middleware to attach io instance to requests (if needed in other parts)
 app.use((req, res, next) => {
   req.io = io; 
   next();
@@ -50,10 +79,9 @@ app.use((req, res, next) => {
 app.use('/api/users', userRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/cases', policeCaseRoutes);
-app.use('/api/anonymous', anonymousRoutes)
-app.use('/api/chatbot', chatbotRoutes);
-
-
+app.use('/api/anonymous', anonymousRoutes);
+app.use('/api/faqs', faqRoutes);
+app.use('/api/public-chat', PublicChatMessageRoutes);
 
 // Handle unknown routes
 app.use((req, res) => {

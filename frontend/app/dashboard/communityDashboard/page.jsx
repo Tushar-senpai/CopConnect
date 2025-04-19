@@ -3,28 +3,26 @@ import { Shield, MessageCircle, Users, Newspaper, ChevronRight, Bot, ArrowLeft, 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
-import PublicChat from '@/app/HelpingComponents/PublicChatSection';
-import ChatbotSection from '@/app/HelpingComponents/ChatbotSection';
+import PublicChatSection from '@/app/HelpingComponents/PublicChatSection';
+
+import FaqSection from '@/app/HelpingComponents/FaqSection';
 
 export default function CommunityDashboard() {
   const [activeSection, setActiveSection] = useState('chatbot');
   
   const menuItems = [
-    { id: 'chatbot', label: 'Chatbot', icon: Bot, description: 'Get answers to your questions' },
-    { id: 'publicChat', label: 'Public Chat', icon: Users, description: 'Share your thoughts with the community' },
-    { id: 'localNews', label: 'News in your area', icon: Newspaper, description: 'Stay informed about local events' }
+    { id: 'FAQ', label: 'Navigating CopConnect', icon: Bot, description: 'Get answers to your questions' },
+    { id: 'PublicChatMessage', label: 'Public Chat', icon: Users, description: 'Share your thoughts with the community' },
   ];
 
   const renderContent = () => {
     switch (activeSection) {
-      case 'chatbot':
-        return <ChatbotSection />;
-      case 'publicChat':
-        return <PublicChat />;
-      case 'localNews':
-        return <LocalNewsSection />;
+      case 'FAQ':
+        return <FaqSection />;
+      case 'PublicChatMessage':
+        return <PublicChatSection />;
       default:
-        return <ChatbotSection />;
+        return <FaqSection />;
     }
   };
 
