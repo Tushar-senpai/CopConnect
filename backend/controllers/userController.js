@@ -90,5 +90,14 @@ export const loginUser = async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Login failed' });
     }
-  };
+};
   
+export const findPoliceOfficers = async(req, res) => {
+  try {
+    const officers = await User.find({ role: 'police' });
+    res.status(200).json(officers);
+  } catch (err) {
+    console.error("Error fetching police officers:", err);
+    res.status(500).json({ error: 'Failed to fetch police officers' });
+  }
+};
