@@ -1,5 +1,5 @@
 import express from 'express';
-import { fileCase, searchCases, getOpenCases, getAllCases } from '../controllers/policeCaseController.js';
+import { fileCase, searchCases, getOpenCases, getAllCases, markAsResolved, getCaseByVictimContact } from '../controllers/policeCaseController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import upload from '../middleware/multer.js';
 
@@ -13,6 +13,10 @@ router.get('/searchCase', protect(['police']), searchCases);
 router.get('/getAllCases', protect(['police']), getAllCases);
 
 router.get('/getOpenCases', protect(['police']), getOpenCases);
+
+router.post("/markAsResolved", markAsResolved);
+
+router.get('/search-by-contact', getCaseByVictimContact);
 
 // Route to get all cases
 // router.get('/getCases', protect(['police'), getAllCases);

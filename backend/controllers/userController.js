@@ -28,7 +28,7 @@ export const registerUser = async (req, res) => {
     
 
     await newUser.save();
-    const token = jwt.sign({ id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: newUser._id, role: newUser.role, phone:newUser.phone }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     // Return token along with success message
     res.status(201).json({ message: 'User registered successfully', token });
@@ -76,6 +76,7 @@ export const loginUser = async (req, res) => {
           id: user._id,
           role: user.role,
           name: user.name,
+          phone: user.phone,
           badgeNumber: user.badgeNumber
         },
         process.env.JWT_SECRET,
