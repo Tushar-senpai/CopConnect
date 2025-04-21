@@ -1,12 +1,8 @@
-'use client'
-import {
-  FileText,
-  MapPin,
-} from "lucide-react";
+"use client";
+import { FileText, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { jwtDecode } from "jwt-decode"; // Correct import
-
 
 const socket = io("http://localhost:5001"); // Update with backend URL
 
@@ -16,7 +12,7 @@ const FileReportPage = () => {
     description: "",
     location: { lat: null, lng: null },
     filedBy: "", // Set dynamically after decoding token
-    phone: "",   // Store user's phone number
+    phone: "", // Store user's phone number
   });
 
   const [message, setMessage] = useState(null);
@@ -30,12 +26,12 @@ const FileReportPage = () => {
         const decoded_token = jwtDecode(token); // Decode token
         console.log("Decoded Token:", decoded_token);
         console.log("full data:", data);
-        console.log("name inside data: ",data.user.name);
+        console.log("name inside data: ", data.user.name);
 
         setReportData((prevState) => ({
           ...prevState,
           filedBy: data.user.name, // Set filedBy to user's name
-          phone: data.user.phone,  // Set phone number
+          phone: data.user.phone, // Set phone number
         }));
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -66,28 +62,36 @@ const FileReportPage = () => {
     e.preventDefault();
 
     try {
-      const token = sessionStorage.getItem("token");    
+      const token = sessionStorage.getItem("token");
 
-      console.log("Submitting now : ")
-      console.log("this is the report data being sent ",reportData);
+      console.log("Submitting now : ");
+      console.log("this is the report data being sent ", reportData);
 
-      const response = await fetch("http://localhost:5001/api/reports/fileReport", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Ensure correct format
-        },
-        body: JSON.stringify(reportData),
-      });
+      const response = await fetch(
+        "http://localhost:5001/api/reports/fileReport",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Ensure correct format
+          },
+          body: JSON.stringify(reportData),
+        }
+      );
 
       const data = await response.json();
       console.log("Response from server:", data);
 
-
       if (response.ok) {
-        setMessage("Complaint filed successfully!");
+        setMessage("Complaint filed successfully! Our officer will get in touch with u in a few moments.");
         socket.emit("new_complaint", data); // Notify backend
-        setReportData({ type: "", description: "", location: "", filedBy: reportData.filedBy, phone: reportData.phone });
+        setReportData({
+          type: "",
+          description: "",
+          location: "",
+          filedBy: reportData.filedBy,
+          phone: reportData.phone,
+        });
       } else {
         setMessage(data.error || "Failed to submit complaint.");
       }
@@ -114,7 +118,6 @@ const FileReportPage = () => {
       }
     );
   };
-  
 
   return (
     <>
@@ -154,7 +157,10 @@ const FileReportPage = () => {
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-sm font-semibold">
+              <label
+                htmlFor="description"
+                className="block text-sm font-semibold"
+              >
                 Description
               </label>
               <textarea
@@ -173,33 +179,32 @@ const FileReportPage = () => {
                 Location
               </label>
               <div className="flex items-center space-x-2 mt-2">
-  <MapPin className="h-6 w-6 text-white" />
+                <MapPin className="h-6 w-6 text-white" />
 
-  {/* Input shows lat,lng as a string for reference */}
-  <input
-    type="text"
-    id="location"
-    name="location"
-    value={
-      reportData.location.lat && reportData.location.lng
-        ? `${reportData.location.lat}, ${reportData.location.lng}`
-        : ""
-    }
-    onChange={handleChange}
-    className="w-full p-3 bg-white/10 text-white border border-blue-400/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-    placeholder="Enter the location or use current"
-  />
+                {/* Input shows lat,lng as a string for reference */}
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={
+                    reportData.location.lat && reportData.location.lng
+                      ? `${reportData.location.lat}, ${reportData.location.lng}`
+                      : ""
+                  }
+                  onChange={handleChange}
+                  className="w-full p-3 bg-white/10 text-white border border-blue-400/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter the location or use current"
+                />
 
-  {/* Button to auto-fill current location */}
-  <button
-    type="button"
-    onClick={getLocation}
-    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-  >
-    Use Current
-  </button>
-</div>
-
+                {/* Button to auto-fill current location */}
+                <button
+                  type="button"
+                  onClick={getLocation}
+                  className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                  Use Current
+                </button>
+              </div>
             </div>
 
             <div className="flex justify-end space-x-4">
@@ -211,7 +216,14 @@ const FileReportPage = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setReportData({ type: "", description: "", location: "", severity: "Low" })}
+                onClick={() =>
+                  setReportData({
+                    type: "",
+                    description: "",
+                    location: "",
+                    severity: "Low",
+                  })
+                }
                 className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
                 Reset

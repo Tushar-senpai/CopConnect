@@ -203,17 +203,19 @@ const PoliceDashboard = () => {
             </div>
           </Link>
 
+          <Link href="/supportPages/CopNotes" className="block">
           <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 text-white border border-green-400/20 hover:shadow-lg hover:shadow-green-500/20 transform hover:-translate-y-1 transition-all duration-300 w-full h-full">
             <div className="flex items-center space-x-4">
               <div className="bg-white/10 p-3 rounded-lg">
                 <Phone className="h-6 w-6 text-white" />
               </div>
               <div className="text-left">
-                <h2 className="text-xl font-semibold">Emergency Response</h2>
-                <p className="text-green-100 mt-1">Dispatch units</p>
+                <h2 className="text-xl font-semibold">Your page</h2>
+                <p className="text-green-100 mt-1">Make notes and see your stats</p>
               </div>
             </div>
           </div>
+          </Link>
 
           <Link href="/supportPages/PoliceSearchCases" className="block">
             <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl p-6 text-white border border-purple-400/20 hover:shadow-lg hover:shadow-purple-500/20 transform hover:-translate-y-1 transition-all duration-300 w-full h-full">
@@ -238,7 +240,7 @@ const PoliceDashboard = () => {
             <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-white">
-                  Active Cases
+                  Active Filed Cases
                 </h2>
                 <div className="flex space-x-2">
                   <button className="bg-white/10 p-2 rounded-lg hover:bg-white/20">
@@ -316,37 +318,33 @@ const PoliceDashboard = () => {
 
           {/* Right Sidebar */}
           <div className="space-y-6">
-            {/* Recent Tips */}
-            <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Active Anonymous Tips
-              </h2>
-              <div className="space-y-4">
-                {anonymousTips.map((tip) => (
-                  <Link
-                    href={`/supportPages/AnonymousTipDetailDisplay/${tip._id}`}
-                    key={tip._id}
-                  >
-                    <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-all">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-blue-300">
-                          {tip.type}
-                        </span>
-                        <span className="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-200">
-                          {tip.status}
-                        </span>
-                      </div>
-                      <p className="text-white text-sm mt-2">
-                        {tip.description}
-                      </p>
-                      <span className="text-sm text-blue-300 mt-2 block">
-                        {findTimeDifference(tip.submitted_at)} hour(s) ago
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
+          <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">
+  <h2 className="text-xl font-semibold text-white mb-4">
+    Active Anonymous Tips
+  </h2>
+  <div>
+    {anonymousTips.map((tip) => (
+      <Link
+        href={`/supportPages/AnonymousTipDetailDisplay/${tip._id}`}
+        key={tip._id}
+      >
+        <div className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-all mb-4"> {/* <== Added mb-4 for spacing */}
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-blue-300">{tip.type}</span>
+            <span className="text-xs px-3 py-1 rounded-full bg-blue-500/20 text-blue-200">
+              {tip.status}
+            </span>
+          </div>
+          <p className="text-white text-sm mt-2">{tip.description}</p>
+          <span className="text-sm text-blue-300 mt-2 block">
+            {findTimeDifference(tip.submitted_at)} hour(s) ago
+          </span>
+        </div>
+      </Link>
+    ))}
+  </div>
+</div>
+
 
             {/* Patrol Units */}
             <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">

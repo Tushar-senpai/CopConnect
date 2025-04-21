@@ -11,6 +11,8 @@ import {
   Filter,
   ArrowLeft,
 } from "lucide-react";
+import { useRouter } from "next/navigation"; // Import for navigation
+
 
 const PoliceSearchCases = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,6 +20,8 @@ const PoliceSearchCases = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const router = useRouter(); // Initialize router for navigation
+
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -45,6 +49,10 @@ const PoliceSearchCases = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCaseClick = (caseNumber) => {
+    router.push(`/supportPages/PoliceCaseDetailDisplay/${caseNumber}`); // Navigate to the case detail page
   };
 
   return (
@@ -161,6 +169,7 @@ const PoliceSearchCases = () => {
                   <div
                     key={case_._id}
                     className="bg-white/5 hover:bg-white/10 rounded-lg p-4 cursor-pointer transition-all"
+                    onClick={() => handleCaseClick(case_.caseNumber)}
                   >
                     <div className="flex justify-between items-start">
                       <div>
@@ -225,6 +234,7 @@ const PoliceSearchCases = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-300"
+                          onClick={(e) => e.stopPropagation()} // Prevent the parent onClick from firing
                         >
                           📎 View Attached Evidence
                         </a>

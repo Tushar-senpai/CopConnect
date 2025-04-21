@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AlertTriangle,
   FileText,
@@ -10,9 +10,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import MapStations from "@/app/HelpingComponents/MapStations";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import html2pdf from "html2pdf.js";
 
 const CitizenDashboard = () => {
-  const [complaintProgress, setComplaintProgress] = useState("In Review");
+  const [recentAlerts, setRecentAlerts] = useState([]);
+  const [complaintProgress, setComplaintProgress] = useState("reviewing");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const emergencyContacts = [
     { title: "Police Emergency", number: "100" },
@@ -22,18 +28,49 @@ const CitizenDashboard = () => {
     { title: "Ambulance", number: "108" },
   ];
 
-  const recentAlerts = [
-    {
-      type: "Traffic",
-      message: "Heavy congestion on MG Road - Please take alternate routes",
-      time: "2 hours ago",
-    },
-    {
-      type: "Safety",
-      message: "Increased pickpocketing reported in Central Market area",
-      time: "5 hours ago",
-    },
-  ];
+  useEffect(() => {
+    const fetchComplaints = async () => {
+      try {
+        const token = sessionStorage.getItem("token");
+        console.log("this is the token: ", token);
+
+        const decoded = jwtDecode(token);
+        console.log("this is the decoded token : ", decoded);
+
+        const phone = decoded?.phone;
+        console.log("decoded phone number : ", phone);
+
+        if (!phone) {
+          setError("User phone number not found.");
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get(
+          `http://localhost:5001/api/cases/search-by-contact?contact=${phone}`
+        );
+
+        setRecentAlerts(response.data.cases);
+      } catch (err) {
+        console.error("Error fetching complaints:", err); // 🔥 Add this line
+        setError("Failed to fetch complaints.");
+        setRecentAlerts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchComplaints();
+  }, []);
+
+  const showReportPage = (index) => {
+    const selectedComplaint = recentAlerts[index];
+    const encodedData = encodeURIComponent(JSON.stringify(selectedComplaint));
+    window.open(
+      `/supportPages/DownloadReportForCitizen?data=${encodedData}`,
+      "_blank"
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
@@ -129,31 +166,57 @@ const CitizenDashboard = () => {
           </div>
 
           {/* Safety Alerts */}
-          <div className="bg-gray-900/50 backdrop-blur-md rounded-xl p-6 text-white border border-blue-400/20 col-span-2">
+          <div className="bg-gray-900/50 backdrop-blur-md rounded-xl p-6 text-white border border-blue-400/20 col-span-2 relative">
             <div className="flex items-center space-x-4 mb-6">
               <div className="bg-white/10 p-3 rounded-lg">
                 <Shield className="h-6 w-6 text-white" />
               </div>
-              <h2 className="text-xl font-semibold">Safety Alerts</h2>
+              <h2 className="text-xl font-semibold">
+                Check your complaint filed at the station
+              </h2>
             </div>
-            <div className="space-y-4">
-              {recentAlerts.map((alert, index) => (
-                <div
-                  key={index}
-                  className="bg-white/5 hover:bg-white/10 p-4 rounded-lg transition-all duration-300"
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
+
+            {/* Loader or error */}
+            {loading ? (
+              <p className="text-blue-300">Loading complaints...</p>
+            ) : error ? (
+              <p className="text-red-400">{error}</p>
+            ) : recentAlerts.length === 0 ? (
+              <p className="text-blue-100">No complaints found.</p>
+            ) : (
+              <div className="space-y-4">
+                {recentAlerts.map((alert, index) => (
+                  <div
+                    key={index}
+                    className="bg-white/5 hover:bg-white/10 p-4 rounded-lg transition-all duration-300"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <span className="text-sm text-blue-300">
+                          {alert.caseType || "Complaint"}
+                        </span>
+                        <p className="mt-1 text-blue-100">
+                          {alert.description}
+                        </p>
+                      </div>
                       <span className="text-sm text-blue-300">
-                        {alert.type}
+                        {alert.status}
                       </span>
-                      <p className="mt-1 text-blue-100">{alert.message}</p>
                     </div>
-                    <span className="text-sm text-blue-300">{alert.time}</span>
+
+                    {/* Button inside the box */}
+                    <div className="flex justify-end mt-3">
+                      <button
+                        onClick={() => showReportPage(index)}
+                        className="text-sm text-blue-200 border border-blue-400 px-3 py-1 rounded hover:bg-blue-500/20"
+                      >
+                        Download Report
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

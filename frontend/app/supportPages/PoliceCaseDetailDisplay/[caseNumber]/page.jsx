@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { ArrowLeft } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
 
 const CaseDetailDisplay = () => {
   const router = useRouter();
@@ -11,6 +12,7 @@ const CaseDetailDisplay = () => {
   const caseNumber = params.caseNumber; // Access route param from the dynamic segment
 
   const [caseDetails, setCaseDetails] = useState(null);
+  const [message, setMessage] = useState("Mark as resolved");
 
   useEffect(() => {
     if (!caseNumber) return;
@@ -44,6 +46,54 @@ const CaseDetailDisplay = () => {
 
   const goBack = () => {
     router.back(); // Navigates to the previous page in history
+  };
+
+  const handleMarkAsResolved = async () => {
+    try {
+      const response = await fetch("/api/mark-resolved", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ caseId: caseDetails.caseNumber }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to mark as resolved");
+      }
+
+      const result = await response.json();
+      alert("✅ Case marked as resolved!");
+      // Optionally redirect or update UI
+    } catch (error) {
+      console.error("Error marking case as resolved:", error);
+      alert("❌ Could not mark as resolved. Please try again.");
+    }
+  };
+
+  const markAsResolved = async () => {
+    const token = sessionStorage.getItem("token");
+    const decoded = jwtDecode(token)
+    // console.log("i am the decoded token haha :", decoded.name);
+    if (decoded.name !== caseDetails.reportingOfficer) {
+      setMessage("❌ Only assigned officer can mark as resolved.");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:5001/api/cases/markAsResolved", {
+        caseNumber: caseDetails.caseNumber,
+      });
+
+      if (response.status === 200) {
+        setMessage("✅ Case successfully marked as Closed.");
+      } else {
+        setMessage("⚠️ Failed to mark case. Try again later.");
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("🚨 An error occurred while marking the case.");
+    }
   };
 
   return (
@@ -211,6 +261,16 @@ const CaseDetailDisplay = () => {
                     })()}
                   </p>
                 </div>
+              </div>
+              {/* Action Button */}
+              <div className="p-8 pt-6 w-full max-w-6xl flex flex-col items-center space-y-3">
+
+                <button
+                  onClick={markAsResolved}
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-lg transition-all duration-300"
+                >
+                  {message}
+                </button>
               </div>
             </div>
           </div>
