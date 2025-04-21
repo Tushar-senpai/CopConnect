@@ -7,6 +7,7 @@ import {
   Phone,
   Shield,
   Users,
+  ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
 import MapStations from "@/app/HelpingComponents/MapStations";
@@ -75,14 +76,28 @@ const CitizenDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
       <nav className="bg-gray-900/50 backdrop-blur-md border-b border-blue-500/20 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="relative max-w-7xl mx-auto px-4 py-4 flex items-center justify-center">
+          {/* Back Button on the Left */}
+          <div className="absolute left-4 flex items-center space-x-2">
+            <Link
+              href="/"
+              className="flex items-center space-x-2 hover:underline transition duration-200"
+            >
+              <ArrowLeft className="h-5 w-5 text-blue-400" />
+              <span className="text-blue-400">Back to Home</span>
+            </Link>
+          </div>
+
+          {/* Center Title */}
           <div className="flex items-center space-x-2">
             <Shield className="text-blue-400 h-8 w-8" />
             <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
               Citizen Portal
             </span>
           </div>
-          <div className="flex items-center space-x-4">
+
+          {/* Icon on the Right */}
+          <div className="absolute right-4 flex items-center space-x-4">
             <div className="h-8 w-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
               <Users className="h-5 w-5 text-white" />
             </div>

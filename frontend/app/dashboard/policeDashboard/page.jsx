@@ -11,12 +11,15 @@ import {
   MapPin,
   Phone,
   MessageSquare,
-  Tag,
+  ArrowLeft,
   Folder,
+  
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import CitizenCasesForPoliceDash from "@/app/HelpingComponents/CitizenCasesForPoliceDash";
+import PatrolUnits from "@/app/HelpingComponents/PatrolUnits";
 
 const PoliceDashboard = () => {
   const [activeTab, setActiveTab] = useState("cases");
@@ -24,6 +27,8 @@ const PoliceDashboard = () => {
   const [openCases, setOpenCases] = useState([]);
   const [activeCasesNumber, setActiveCasesNumber] = useState(0);
   const [anonymousTips, setAnonymousTips] = useState([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchOpenCases = async () => {
@@ -94,49 +99,40 @@ const PoliceDashboard = () => {
     newTips: 8,
   };
 
-  const patrolUnits = [
-    {
-      id: "PU-1",
-      officer: "Officer Wilson",
-      location: "Downtown",
-      status: "On Patrol",
-    },
-    {
-      id: "PU-2",
-      officer: "Officer Garcia",
-      location: "North District",
-      status: "Responding",
-    },
-    {
-      id: "PU-3",
-      officer: "Officer Chen",
-      location: "West Side",
-      status: "Available",
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-blue-900">
       {/* Navigation Bar */}
+     
       <nav className="bg-slate-900/50 backdrop-blur-md border-b border-blue-500/20 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Shield className="text-blue-400 h-8 w-8" />
-            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-              Police Dashboard
-            </span>
-          </div>
-          <div className="flex items-center space-x-6">
-            {/* <Bell className="h-6 w-6 text-blue-300" /> */}
-            <div className="flex items-center space-x-2">
-              <div className="bg-blue-500/20 p-2 rounded-full">
-                <User className="h-5 w-5 text-blue-300" />
-              </div>
-              <span className="text-blue-300">Officer</span>
-            </div>
-          </div>
-        </div>
-      </nav>
+  <div className="relative max-w-7xl mx-auto px-4 py-4 flex items-center justify-center">
+    
+    {/* Back Button on the Left */}
+    <div className="absolute left-4 flex items-center space-x-2">
+      <Link href="/" className="flex items-center space-x-2 hover:underline">
+        <ArrowLeft className="h-5 w-5 text-blue-400" />
+        <span className="text-blue-400">Back to Home</span>
+      </Link>
+    </div>
+
+    {/* Centered Title */}
+    <div className="flex items-center space-x-2">
+      <Shield className="text-blue-400 h-8 w-8" />
+      <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+        Police Dashboard
+      </span>
+    </div>
+
+    {/* Officer Info on the Right */}
+    <div className="absolute right-4 flex items-center space-x-2">
+      <div className="bg-blue-500/20 p-2 rounded-full">
+        <User className="h-5 w-5 text-blue-300" />
+      </div>
+      <span className="text-blue-300">Officer</span>
+    </div>
+
+  </div>
+</nav>
+
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         {/* Stats Overview */}
@@ -204,17 +200,19 @@ const PoliceDashboard = () => {
           </Link>
 
           <Link href="/supportPages/CopNotes" className="block">
-          <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 text-white border border-green-400/20 hover:shadow-lg hover:shadow-green-500/20 transform hover:-translate-y-1 transition-all duration-300 w-full h-full">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/10 p-3 rounded-lg">
-                <Phone className="h-6 w-6 text-white" />
-              </div>
-              <div className="text-left">
-                <h2 className="text-xl font-semibold">Your page</h2>
-                <p className="text-green-100 mt-1">Make notes and see your stats</p>
+            <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 text-white border border-green-400/20 hover:shadow-lg hover:shadow-green-500/20 transform hover:-translate-y-1 transition-all duration-300 w-full h-full">
+              <div className="flex items-center space-x-4">
+                <div className="bg-white/10 p-3 rounded-lg">
+                  <Phone className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-left">
+                  <h2 className="text-xl font-semibold">Your page</h2>
+                  <p className="text-green-100 mt-1">
+                    Make notes and see your stats
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
           </Link>
 
           <Link href="/supportPages/PoliceSearchCases" className="block">
@@ -235,7 +233,9 @@ const PoliceDashboard = () => {
         {/* Main Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4 py-8">
           {/* Left Section - Cases List + Selected Case */}
+
           <div className="lg:col-span-2 space-y-6">
+            <CitizenCasesForPoliceDash />
             {/* Cases List */}
             <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">
               <div className="flex items-center justify-between mb-6">
@@ -314,75 +314,51 @@ const PoliceDashboard = () => {
                 )}
               </div>
             </div>
+
+            {/* New Section: Citizen Complaints */}
           </div>
 
           {/* Right Sidebar */}
           <div className="space-y-6">
-          <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">
-  <h2 className="text-xl font-semibold text-white mb-4">
-    Active Anonymous Tips
-  </h2>
-  <div>
-    {anonymousTips.map((tip) => (
-      <Link
-        href={`/supportPages/AnonymousTipDetailDisplay/${tip._id}`}
-        key={tip._id}
-      >
-        <div className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-all mb-4"> {/* <== Added mb-4 for spacing */}
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-blue-300">{tip.type}</span>
-            <span className="text-xs px-3 py-1 rounded-full bg-blue-500/20 text-blue-200">
-              {tip.status}
-            </span>
-          </div>
-          <p className="text-white text-sm mt-2">{tip.description}</p>
-          <span className="text-sm text-blue-300 mt-2 block">
-            {findTimeDifference(tip.submitted_at)} hour(s) ago
-          </span>
-        </div>
-      </Link>
-    ))}
-  </div>
-</div>
-
-
-            {/* Patrol Units */}
             <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">
               <h2 className="text-xl font-semibold text-white mb-4">
-                Patrol Units
+                Active Anonymous Tips
               </h2>
-              <div className="space-y-4">
-                {patrolUnits.map((unit) => (
-                  <div key={unit.id} className="bg-white/5 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-white font-medium">
-                        {unit.officer}
-                      </span>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          unit.status === "On Patrol"
-                            ? "bg-green-500/20 text-green-200"
-                            : unit.status === "Responding"
-                            ? "bg-red-500/20 text-red-200"
-                            : "bg-blue-500/20 text-blue-200"
-                        }`}
-                      >
-                        {unit.status}
+              <div>
+                {anonymousTips.map((tip) => (
+                  <Link
+                    href={`/supportPages/AnonymousTipDetailDisplay/${tip._id}`}
+                    key={tip._id}
+                  >
+                    <div className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-all mb-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-blue-300">
+                          {tip.type}
+                        </span>
+                        <span className="text-xs px-3 py-1 rounded-full bg-red-600 text-blue-200">
+                          {tip.status}
+                        </span>
+                      </div>
+                      <p className="text-white text-sm mt-2">
+                        {tip.description}
+                      </p>
+                      <span className="text-sm text-blue-300 mt-2 block">
+                        {findTimeDifference(tip.submitted_at)} hour(s) ago
                       </span>
                     </div>
-                    <div className="flex items-center space-x-2 mt-2 text-sm text-blue-200">
-                      <MapPin className="h-4 w-4" />
-                      <span>{unit.location}</span>
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
+
+            {/* Patrol Units */}
+            <PatrolUnits />
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default PoliceDashboard;

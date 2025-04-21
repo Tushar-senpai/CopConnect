@@ -3,19 +3,11 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   Eye,
   Shield,
-  FileText,
+  ArrowLeft,
   AlertCircle,
   Lock,
-  Search,
   Info,
   MessageSquare,
-  Camera,
-  Upload,
-  MapPin,
-  Image,
-  Video,
-  X,
-  User,
 } from "lucide-react";
 import Webcam from "react-webcam";
 import { Button } from "components/ui/button";
@@ -158,19 +150,33 @@ const AnonymousDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
       <nav className="bg-gray-900/50 backdrop-blur-md border-b border-blue-500/20 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Eye className="text-blue-400 h-8 w-8" />
-            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-              Anonymous Portal
-            </span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Lock className="h-6 w-6 text-blue-300" />
-            <div className="text-sm text-blue-300">Secure Connection</div>
-          </div>
-        </div>
-      </nav>
+  <div className="relative max-w-7xl mx-auto px-4 py-4 flex items-center justify-center">
+    
+    {/* Back Button on the Left */}
+    <div className="absolute left-4 flex items-center space-x-2">
+      <Link href="/" className="flex items-center space-x-2">
+        <ArrowLeft className="h-5 w-5 text-blue-400" />
+        <span className="text-blue-400">Back to Home</span>
+      </Link>
+    </div>
+
+    {/* Centered Title */}
+    <div className="flex items-center space-x-2">
+      <Eye className="text-blue-400 h-8 w-8" />
+      <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+        Anonymous Portal
+      </span>
+    </div>
+
+    {/* Right Side Secure Info */}
+    <div className="absolute right-4 flex items-center space-x-2">
+      <Lock className="h-6 w-6 text-blue-300" />
+      <span className="text-sm text-blue-300">Secure Connection</span>
+    </div>
+
+  </div>
+</nav>
+
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         {/* Privacy Notice */}
