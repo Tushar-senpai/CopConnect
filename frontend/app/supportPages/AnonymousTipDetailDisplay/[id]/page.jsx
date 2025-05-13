@@ -13,13 +13,11 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-
 const AnonymousTipDetailDisplay = () => {
   const params = useParams();
   const id = params.id;
   console.log("this is the id i have received : ", id);
   const router = useRouter();
-
 
   const [tip, setTip] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,22 +49,19 @@ const AnonymousTipDetailDisplay = () => {
   }, [id]);
 
   const goBack = () => {
-    router.back(); 
+    router.back();
   };
-  
 
   const handleMarkAsReviewed = async () => {
-
     const token = sessionStorage.getItem("token");
 
     if (!token) throw new Error("No token found");
 
     const decoded = jwtDecode(token);
 
-
     console.log("this is the decoded token : ", decoded);
 
-    const officerName = decoded.name;         // Or decoded.officerName
+    const officerName = decoded.name; // Or decoded.officerName
     const badgeNumber = decoded.badgeNumber;
 
     console.log("this is the name i have decoded : ", officerName);
@@ -74,12 +69,17 @@ const AnonymousTipDetailDisplay = () => {
 
     try {
       await axios.patch(`http://localhost:5001/api/anonymous/tips/${id}`, {
-         status: "Reviewed",
-         reviewedBy: officerName,
-         badgeNumber: badgeNumber
-         });
+        status: "Reviewed",
+        reviewedBy: officerName,
+        badgeNumber: badgeNumber,
+      });
       // Update local state to reflect the change
-      setTip((prev) => ({ ...prev, status: "Reviewed", reviewedBy: officerName, badgeNumber: badgeNumber }));
+      setTip((prev) => ({
+        ...prev,
+        status: "Reviewed",
+        reviewedBy: officerName,
+        badgeNumber: badgeNumber,
+      }));
     } catch (err) {
       console.error("Error updating tip status:", err);
       // Handle error (could show a toast notification here)
@@ -101,7 +101,7 @@ const AnonymousTipDetailDisplay = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-blue-900 px-4 py-8">
+      <div className="min-h-screen bg-gradient-to-b from-slate-700 via-slate-400 to-blue-700 px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <button
             onClick={goBack}
@@ -146,7 +146,7 @@ const AnonymousTipDetailDisplay = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-blue-900 px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-blue-800 px-4 py-8">
       <div className="max-w-4xl mx-auto">
         {/* Back button */}
         <button
@@ -219,7 +219,7 @@ const AnonymousTipDetailDisplay = () => {
                   <span className="font-medium">Reported Date</span>
                 </div>
                 <div className="text-blue-100">
-                  {new Date(tip.createdAt).toLocaleDateString()}
+                  Submitted At: {new Date(tip.submitted_at).toLocaleString()}
                 </div>
               </div>
 
@@ -228,7 +228,7 @@ const AnonymousTipDetailDisplay = () => {
                   <MapPin className="h-4 w-4 mr-2" />
                   <span className="font-medium">Location</span>
                 </div>
-                <div>
+                <div className="text-white">
                   Location: {tip.location.coordinates[1]},{" "}
                   {tip.location.coordinates[0]}
                 </div>
@@ -254,7 +254,7 @@ const AnonymousTipDetailDisplay = () => {
             </div>
           </div>
 
-          {/* Description */}
+          {/* Evidence */}
           <div className="p-6 border-b border-blue-500/20">
             <h3 className="text-blue-400 font-medium mb-3 flex items-center">
               <FileText className="h-5 w-5 mr-2" />
@@ -263,53 +263,26 @@ const AnonymousTipDetailDisplay = () => {
             <div className="bg-slate-900/50 rounded-lg p-4 text-blue-100">
               {tip.description}
             </div>
-          </div>
-
-          {/* Media Section */}
-          {tip.media && tip.media.length > 0 && (
-            <div className="p-6 border-b border-blue-500/20">
-              <h3 className="text-blue-400 font-medium mb-3 flex items-center">
-                <Camera className="h-5 w-5 mr-2" />
-                Attached Media
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {tip.media.map((item, index) => (
-                  <div
-                    key={index}
-                    className="bg-slate-900/50 rounded-lg overflow-hidden"
+            {/* Evidence */}
+            <div className="pt-4 mt-4 border-t border-blue-500/20">
+              {tip.media?.length > 0 && tip.media[0] ? (
+                <div className="mt-3">
+                  <a
+                    href={tip.media[0]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-300"
                   >
-                    {item.type === "image" ? (
-                      <div>
-                        <div className="aspect-video relative">
-                          <img
-                            src={item.url}
-                            alt={`Evidence ${index + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="p-3 text-sm text-blue-200">
-                          Evidence {index + 1}
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <div className="aspect-video relative">
-                          <video
-                            src={item.url}
-                            className="w-full h-full object-cover"
-                            controls
-                          />
-                        </div>
-                        <div className="p-3 text-sm text-blue-200">
-                          Video Evidence {index + 1}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                    📎 View Attached Evidence
+                  </a>
+                </div>
+              ) : (
+                <div className="mt-3 text-sm text-gray-400 italic">
+                  🚫 No evidence attached
+                </div>
+              )}
             </div>
-          )}
+          </div>
 
           {/* Actions */}
           <div className="p-6 bg-slate-900/30">
@@ -323,12 +296,6 @@ const AnonymousTipDetailDisplay = () => {
                   Mark as Reviewed
                 </button>
               )}
-              {/* <button
-                onClick={handleLinkToCase}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
-              >
-                Link to Case
-              </button> */}
             </div>
           </div>
         </div>

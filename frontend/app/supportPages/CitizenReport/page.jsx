@@ -121,118 +121,121 @@ const FileReportPage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-r from-cyan-600 to-blue-700 p-8">
-        <div className="max-w-4xl mx-auto bg-gradient-to-r from-teal-600 to-cyan-700 rounded-xl p-6 text-white border border-blue-400/20 hover:shadow-lg hover:shadow-blue-500/20 transform hover:-translate-y-1 transition-all duration-300">
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="bg-white/10 p-3 rounded-lg">
-              <FileText className="h-6 w-6 text-white" />
-            </div>
-            <h2 className="text-xl font-semibold">File a New Report</h2>
-          </div>
-
-          {message && (
-            <div className="bg-blue-500 text-white p-3 rounded-lg mb-4 text-center">
-              {message}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="type" className="block text-sm font-semibold">
-                Report Type
-              </label>
-              <select
-                id="type"
-                name="type"
-                value={reportData.type}
-                onChange={handleChange}
-                className="w-full p-3 mt-2 bg-white/10 text-white border border-blue-400/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select Type</option>
-                <option value="Accident">Accident</option>
-                <option value="Crime">Crime</option>
-                <option value="Suspicious Activity">Suspicious Activity</option>
-                <option value="Emergency">Emergency</option>
-              </select>
-            </div>
-
-            <div>
-              <label
-                htmlFor="description"
-                className="block text-sm font-semibold"
-              >
-                Description
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={reportData.description}
-                onChange={handleChange}
-                rows="4"
-                className="w-full p-3 mt-2 bg-white/10 text-white border border-blue-400/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Describe the incident in detail"
-              ></textarea>
-            </div>
-
-            <div>
-              <label htmlFor="location" className="block text-sm font-semibold">
-                Location
-              </label>
-              <div className="flex items-center space-x-2 mt-2">
-                <MapPin className="h-6 w-6 text-white" />
-
-                {/* Input shows lat,lng as a string for reference */}
-                <input
-                  type="text"
-                  id="location"
-                  name="location"
-                  value={
-                    reportData.location.lat && reportData.location.lng
-                      ? `${reportData.location.lat}, ${reportData.location.lng}`
-                      : ""
-                  }
-                  onChange={handleChange}
-                  className="w-full p-3 bg-white/10 text-white border border-blue-400/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter the location or use current"
-                />
-
-                {/* Button to auto-fill current location */}
-                <button
-                  type="button"
-                  onClick={getLocation}
-                  className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                >
-                  Use Current
-                </button>
-              </div>
-            </div>
-
-            <div className="flex justify-end space-x-4">
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
-              >
-                Submit Report
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setReportData({
-                    type: "",
-                    description: "",
-                    location: "",
-                    severity: "Low",
-                  })
-                }
-                className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
-              >
-                Reset
-              </button>
-            </div>
-          </form>
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-700 p-6 md:p-12 flex items-center justify-center">
+  <div className="w-full max-w-3xl mx-auto bg-white/10 backdrop-blur-lg rounded-2xl overflow-hidden shadow-2xl border border-white/20">
+    <div className="p-6 md:p-8">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-6">
+        <div className="bg-blue-600 p-3 rounded-full">
+          <FileText className="h-6 w-6 text-white" />
         </div>
+        <h2 className="text-2xl font-bold text-white">File a New Report</h2>
       </div>
-      {/* <Footer /> */}
+
+      {/* Success/Error Message */}
+      {message && (
+        <div className="bg-blue-600/70 backdrop-blur text-white p-4 rounded-xl mb-6 text-center animate-pulse">
+          {message}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Report Type */}
+        <div>
+          <label htmlFor="type" className="block text-sm font-medium text-blue-100 mb-1">
+            Report Type
+          </label>
+          <select
+            id="type"
+            name="type"
+            value={reportData.type}
+            onChange={handleChange}
+            className="w-full p-3 bg-white/10 text-white border border-blue-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-200"
+          >
+            <option value="">Select Type</option>
+            <option value="Accident">Accident</option>
+            <option value="Crime">Crime</option>
+            <option value="Suspicious Activity">Suspicious Activity</option>
+            <option value="Emergency">Emergency</option>
+          </select>
+        </div>
+
+        {/* Description */}
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium text-blue-100 mb-1">
+            Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={reportData.description}
+            onChange={handleChange}
+            rows="4"
+            className="w-full p-3 bg-white/10 text-white border border-blue-300/30 rounded-xl "
+            placeholder="Describe the incident in detail"
+          ></textarea>
+        </div>
+
+        {/* Location */}
+        <div>
+          <label htmlFor="location" className="block text-sm font-medium text-blue-100 mb-1">
+            Location
+          </label>
+          <div className="flex items-center gap-2">
+            <div className="bg-blue-600/40 p-2 rounded-lg">
+              <MapPin className="h-5 w-5 text-white" />
+            </div>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              value={
+                reportData.location.lat && reportData.location.lng
+                  ? `${reportData.location.lat}, ${reportData.location.lng}`
+                  : ""
+              }
+              onChange={handleChange}
+              className="flex-1 p-3 bg-white/10 text-white border border-blue-300/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-200"
+              placeholder="Enter the location or use current"
+            />
+            <button
+              type="button"
+              onClick={getLocation}
+              className="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-500 transition-colors duration-200 font-medium flex items-center"
+            >
+              Use Current
+            </button>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex justify-end gap-4 pt-4">
+          <button
+            type="button"
+            onClick={() =>
+              setReportData({
+                type: "",
+                description: "",
+                location: "",
+                severity: "Low",
+              })
+            }
+            className="px-6 py-2.5 bg-gray-600/70 hover:bg-gray-500 text-white rounded-xl font-medium transition-all duration-200"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white rounded-xl font-medium shadow-lg shadow-blue-700/30 transition-all duration-200"
+          >
+            Submit Report
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+      
     </>
   );
 };

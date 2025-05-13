@@ -113,23 +113,26 @@ const CitizenCasesForPoliceDash = () => {
 
   return (
     <div className="lg:col-span-2 space-y-6">
-      <div className="bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border border-amber-400/20">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white flex items-center">
-            <AlertCircle className="h-5 w-5 text-amber-400 mr-2" />
-            Citizen Complaints
-          </h2>
-        </div>
+  <div className="bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border border-amber-400/20">
+    <div className="flex items-center justify-between mb-6">
+      <h2 className="text-xl font-semibold text-white flex items-center">
+        <AlertCircle className="h-5 w-5 text-amber-400 mr-2" />
+        Citizen Complaints
+      </h2>
+    </div>
 
-        {isLoading ? (
-          <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-amber-400"></div>
-          </div>
-        ) : error ? (
-          <div className="bg-red-500/20 text-red-300 p-4 rounded-xl text-center">
-            Error loading complaints: {error}
-          </div>
-        ) : (
+    {isLoading ? (
+      <div className="flex justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-amber-400"></div>
+      </div>
+    ) : error ? (
+      <div className="bg-red-500/20 text-red-300 p-4 rounded-xl text-center">
+        Error loading complaints: {error}
+      </div>
+    ) : (
+      <div>
+        {/* Fixed height container with overflow for scrolling */}
+        <div className="h-96 overflow-y-auto pr-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#fbbf24 #334155' }}>
           <div className="space-y-4">
             {citizenReports &&
               Array.isArray(citizenReports) &&
@@ -184,7 +187,6 @@ const CitizenCasesForPoliceDash = () => {
                     </div>
                     <span className="text-xs text-blue-400 whitespace-nowrap">
                       <div>
-                        
                         <span className="text-sm text-blue-400 ml-2">
                           ({new Date(report.filedAt).toLocaleString()})
                         </span>
@@ -196,7 +198,6 @@ const CitizenCasesForPoliceDash = () => {
                     <div className="flex items-center space-x-4 text-sm text-blue-200">
                       <div className="flex items-center space-x-2">
                         <MapPin className="h-4 w-4" />
-                        {/* <span>{report.location || "Location not specified"}</span> */}
                         <p>
                           Location:
                           {report.location
@@ -229,9 +230,19 @@ const CitizenCasesForPoliceDash = () => {
                 </div>
               ))}
           </div>
-        )}
+        </div>
+        
+        {/* Pagination controls */}
+        <div className="mt-4 flex justify-between items-center">
+          <div className="text-blue-300 text-sm">
+            Showing only 2 of {citizenReports ? citizenReports.length : 0} complaints
+          </div>
+          
+        </div>
       </div>
-    </div>
+    )}
+  </div>
+</div>
   );
 };
 

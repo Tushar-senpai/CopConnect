@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import {
   Shield,
   Search,
-  Filter,
+  Briefcase,
+  FileX,
   Clock,
   CheckCircle,
   Plus,
@@ -13,7 +14,8 @@ import {
   MessageSquare,
   ArrowLeft,
   Folder,
-  
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
@@ -102,37 +104,37 @@ const PoliceDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-blue-900">
       {/* Navigation Bar */}
-     
+
       <nav className="bg-slate-900/50 backdrop-blur-md border-b border-blue-500/20 sticky top-0 z-10">
-  <div className="relative max-w-7xl mx-auto px-4 py-4 flex items-center justify-center">
-    
-    {/* Back Button on the Left */}
-    <div className="absolute left-4 flex items-center space-x-2">
-      <Link href="/" className="flex items-center space-x-2 hover:underline">
-        <ArrowLeft className="h-5 w-5 text-blue-400" />
-        <span className="text-blue-400">Back to Home</span>
-      </Link>
-    </div>
+        <div className="relative max-w-7xl mx-auto px-4 py-4 flex items-center justify-center">
+          {/* Back Button on the Left */}
+          <div className="absolute left-4 flex items-center space-x-2">
+            <Link
+              href="/"
+              className="flex items-center space-x-2 hover:underline"
+            >
+              <ArrowLeft className="h-5 w-5 text-blue-400" />
+              <span className="text-blue-400">Back to Home</span>
+            </Link>
+          </div>
 
-    {/* Centered Title */}
-    <div className="flex items-center space-x-2">
-      <Shield className="text-blue-400 h-8 w-8" />
-      <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-        Police Dashboard
-      </span>
-    </div>
+          {/* Centered Title */}
+          <div className="flex items-center space-x-2">
+            <Shield className="text-blue-400 h-8 w-8" />
+            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+              Police Dashboard
+            </span>
+          </div>
 
-    {/* Officer Info on the Right */}
-    <div className="absolute right-4 flex items-center space-x-2">
-      <div className="bg-blue-500/20 p-2 rounded-full">
-        <User className="h-5 w-5 text-blue-300" />
-      </div>
-      <span className="text-blue-300">Officer</span>
-    </div>
-
-  </div>
-</nav>
-
+          {/* Officer Info on the Right */}
+          <div className="absolute right-4 flex items-center space-x-2">
+            <div className="bg-blue-500/20 p-2 rounded-full">
+              <User className="h-5 w-5 text-blue-300" />
+            </div>
+            <span className="text-blue-300">Officer</span>
+          </div>
+        </div>
+      </nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         {/* Stats Overview */}
@@ -238,82 +240,98 @@ const PoliceDashboard = () => {
             <CitizenCasesForPoliceDash />
             {/* Cases List */}
             <div className="bg-slate-900/50 backdrop-blur-md rounded-xl p-6 border border-blue-400/20">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-white">
-                  Active Filed Cases
-                </h2>
-                <div className="flex space-x-2">
-                  <button className="bg-white/10 p-2 rounded-lg hover:bg-white/20">
-                    <Filter className="h-5 w-5 text-blue-300" />
-                  </button>
-                  <button className="bg-white/10 p-2 rounded-lg hover:bg-white/20">
-                    <Search className="h-5 w-5 text-blue-300" />
-                  </button>
+  <div className="flex items-center justify-between mb-6">
+    <h2 className="text-xl font-semibold text-white flex items-center">
+      <Briefcase className="h-5 w-5 text-blue-400 mr-2" />
+      Active Filed Cases
+    </h2>
+    <div className="flex space-x-2">
+      
+    </div>
+  </div>
+
+  {/* Horizontal scrolling container */}
+  <div className="overflow-x-auto pb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: '#60a5fa #1e293b' }}>
+    <div className="flex flex-nowrap gap-6 min-w-full">
+      {openCases.length > 0 ? (
+        openCases.map((case_) => (
+          <Link
+            href={`/supportPages/PoliceCaseDetailDisplay/${case_.caseNumber}`}
+            key={case_.caseNumber}
+            className="flex-none w-80"
+          >
+            <div className="bg-white/5 hover:bg-white/10 rounded-2xl p-6 cursor-pointer transition-all shadow-md border-t-4 border-blue-500 h-full">
+              <div className="flex flex-col h-full">
+                <div className="flex justify-between items-start">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-sm text-blue-300 font-mono">
+                      #{case_.caseNumber}
+                    </span>
+                    <span
+                      className={`text-xs px-3 py-1 rounded-full font-semibold ${
+                        case_.priority === "High"
+                          ? "bg-red-500/20 text-red-300"
+                          : case_.priority === "Medium"
+                          ? "bg-yellow-500/20 text-yellow-300"
+                          : "bg-green-500/20 text-green-300"
+                      }`}
+                    >
+                      {case_.priority}
+                    </span>
+                  </div>
+                  <span className="text-xs text-blue-400 whitespace-nowrap bg-blue-900/30 px-3 py-1 rounded-full">
+                    {case_.lastUpdate}
+                  </span>
+                </div>
+
+                <div className="my-4">
+                  <h3 className="text-white text-lg font-semibold mb-2">
+                    {case_.title}
+                  </h3>
+                  <p className="text-blue-200 text-sm line-clamp-3">
+                    {case_.description}
+                  </p>
+                </div>
+
+                <div className="mt-auto flex flex-col gap-3 text-sm text-blue-200">
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-blue-400 flex-shrink-0" />
+                    <span className="truncate">{case_.location}</span>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <User className="h-4 w-4 text-blue-400 flex-shrink-0" />
+                    <span className="truncate">{case_.assignedTo}</span>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex flex-col gap-10">
-                {openCases.length > 0 ? (
-                  openCases.map((case_) => (
-                    <Link
-                      href={`/supportPages/PoliceCaseDetailDisplay/${case_.caseNumber}`}
-                      key={case_.caseNumber}
-                    >
-                      <div className="bg-white/5 hover:bg-white/10 rounded-2xl p-6 cursor-pointer transition-all shadow-md">
-                        <div className="flex justify-between items-start">
-                          <div className="space-y-2">
-                            <div className="flex items-center space-x-3">
-                              <span className="text-sm text-blue-300 font-mono">
-                                #{case_.caseNumber}
-                              </span>
-                              <span
-                                className={`text-xs px-3 py-1 rounded-full font-semibold ${
-                                  case_.priority === "High"
-                                    ? "bg-red-500/20 text-red-300"
-                                    : case_.priority === "Medium"
-                                    ? "bg-yellow-500/20 text-yellow-300"
-                                    : "bg-green-500/20 text-green-300"
-                                }`}
-                              >
-                                {case_.priority}
-                              </span>
-                            </div>
-
-                            <h3 className="text-white text-lg font-semibold">
-                              {case_.title}
-                            </h3>
-
-                            <p className="text-blue-200 text-sm">
-                              {case_.description}
-                            </p>
-                          </div>
-
-                          <span className="text-xs text-blue-400 whitespace-nowrap">
-                            {case_.lastUpdate}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center flex-wrap gap-6 mt-6 text-sm text-blue-200">
-                          <div className="flex items-center space-x-2">
-                            <MapPin className="h-4 w-4" />
-                            <span>{case_.location}</span>
-                          </div>
-
-                          <div className="flex items-center space-x-2">
-                            <User className="h-4 w-4" />
-                            <span>{case_.assignedTo}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))
-                ) : (
-                  <p className="text-white text-center text-sm">
-                    No active cases available.
-                  </p>
-                )}
-              </div>
             </div>
+          </Link>
+        ))
+      ) : (
+        <div className="bg-blue-900/20 text-blue-300 p-8 rounded-xl text-center w-full">
+          <FileX className="h-12 w-12 mx-auto mb-2 text-blue-400 opacity-70" />
+          <p className="text-white text-center">
+            No active cases available.
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+  
+  {/* Navigation controls */}
+  <div className="mt-4 flex justify-between items-center">
+    <span className="text-blue-300 text-sm">{openCases.length} active cases</span>
+    <div className="flex space-x-3">
+      <button className="bg-blue-600/30 hover:bg-blue-600/40 text-blue-300 p-2 rounded-full transition-colors">
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button className="bg-blue-600/30 hover:bg-blue-600/40 text-blue-300 p-2 rounded-full transition-colors">
+        <ChevronRight className="h-5 w-5" />
+      </button>
+    </div>
+  </div>
+</div>
 
             {/* New Section: Citizen Complaints */}
           </div>
@@ -333,7 +351,11 @@ const PoliceDashboard = () => {
                     <div className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-all mb-4">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-blue-300">
-                          {tip.type}
+                          <p>
+                            Coordinates:{" "}
+                            {tip.location.coordinates[0]}, {" "},
+                            {tip.location.coordinates[1]}
+                          </p>
                         </span>
                         <span className="text-xs px-3 py-1 rounded-full bg-red-600 text-blue-200">
                           {tip.status}
@@ -359,6 +381,5 @@ const PoliceDashboard = () => {
     </div>
   );
 };
-
 
 export default PoliceDashboard;

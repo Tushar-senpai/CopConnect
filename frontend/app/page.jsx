@@ -57,7 +57,7 @@ const CopConnectLanding = () => {
                   href="/notifications"
                   className="text-blue-300 hover:text-blue-100 transition-colors"
                 >
-                  <Bell className="h-5 w-5" />
+                  
                 </Link>
                 <Link
                   href="/supportPages/about"
@@ -185,7 +185,7 @@ const CopConnectLanding = () => {
                       Need Help?
                     </h3>
                     <p className="text-xl text-center font-medium text-blue-100 mb-6">
-                      Click here for our community<br />help service
+                      Click here for our community<br /> help service
                     </p>
                     <div className="bg-white/10 rounded-lg px-4 py-2 mt-4">
                       <span className="text-blue-100">24/7 Support Available</span>

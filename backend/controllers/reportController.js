@@ -9,7 +9,7 @@ export const fileReport = async (req, res) => {
 
     // Validate required fields
     if (!reportType || !description || !location || !filedBy || !phone) {
-      return res.status(400).json({ error: "All fields are required: reportType, description, location, filedBy" });
+      return res.status(400).json({ error: "All fields are required: reportType, description, location" });
     }
 
     // Validate location format
@@ -54,3 +54,36 @@ export const getReports= async (req, res) => {
     res.status(500).json({ error: 'Error fetching reports' });
   }
 };
+
+export const getReportsByPhone = async (req, res) => {
+  const {phone} = req.params;
+
+  try {
+    const reports = await Report.find({phone: phone})
+    if (!reports || reports.length === 0) {
+      return res.status(404).json({ message: 'No reports found for this citizen.' });
+    }
+
+    res.status(200).json(reports);
+  } catch (error) {
+    console.error('Error fetching reports:', error);
+    res.status(500).json({ message: 'error in getReportsByPhone controller ' });
+
+  }
+}
+// export const getReportStatus = async (req, res) => {
+//   const {phone} = req.params;
+
+//   try {
+//     const reports = await Report.find({phone: phone})
+//     if (!reports || reports.length === 0) {
+//       return res.status(404).json({ message: 'No reports found for this citizen.' });
+//     }
+
+//     res.status(200).json(reports.status);
+//   } catch (error) {
+//     console.error('Error fetching report status:', error);
+//     res.status(500).json({ message: 'error in getReportStatus controller ' });
+
+//   }
+// }
