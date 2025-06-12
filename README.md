@@ -31,8 +31,6 @@ CopConnect is a digital bridge built to enhance **communication**, **trust**, an
 
 ## 🚀 Tech Stack
 
-## 🚀 Tech Stack
-
 ### 🔧 Frontend
 - Next.js
 - React 19
