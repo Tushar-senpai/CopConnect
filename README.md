@@ -38,7 +38,6 @@ CopConnect is a digital bridge built to enhance **communication**, **trust**, an
 - Framer Motion
 - ShadCN UI
 - React Leaflet + Leaflet
-- Google Maps API
 - Socket.IO Client
 - html2pdf.js
 - React Webcam
@@ -46,15 +45,11 @@ CopConnect is a digital bridge built to enhance **communication**, **trust**, an
 ### 🧠 Backend
 - Node.js
 - Express
-- MongoDB + Mongoose
-- JWT Auth
 - Socket.IO
 - Cloudinary + Multer
-- bcryptjs
-- dotenv
   
 ### **Database**: MongoDB  
-### **Authentication**: JWT
+### **Authentication**: JWT, Bcrypt.js
 ### **Other**: Google Maps API, WebSockets
 
 Issues: 
