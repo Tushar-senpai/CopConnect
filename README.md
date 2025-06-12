@@ -52,10 +52,10 @@ CopConnect is a digital bridge built to enhance **communication**, **trust**, an
 - Cloudinary + Multer
 - bcryptjs
 - dotenv
-- 
-- **Database**: MongoDB  
-- **Authentication**: JWT
-- **Other**: Google Maps API, WebSockets
+  
+### **Database**: MongoDB  
+### **Authentication**: JWT
+### **Other**: Google Maps API, WebSockets
 
 Issues: 
-Beginner to intermediate level : The maps api is not as effective as it should be, it does not display the live locations of the stations accurately on a map. Not to mention an attractive map interface as well while pointing out the stations.
+Beginner to intermediate level: The Maps API is not as effective as it should be; it does not display the live locations of the stations accurately on a map. Not to mention an attractive map interface, which also points out the stations.
