@@ -60,4 +60,4 @@ CopConnect is a digital bridge built to enhance **communication**, **trust**, an
 - WebSockets
 
 Issues: 
-Beginner to intermediate level: The Maps API is not as effective as it should be; it does not display the live locations of the stations accurately on a map. Not to mention an attractive map interface, which also points out the stations.
+Beginner to intermediate level: The Maps API is not as effective as it should be; it does not display the live locations of the stations accurately on a map.Adding to this, an attractive map interface, which also points out the stations.
