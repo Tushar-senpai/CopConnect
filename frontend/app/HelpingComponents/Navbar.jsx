@@ -13,7 +13,10 @@ const Navbar = () => {
               CopConnect
             </span>
           </div>
-          <Link href="/about" className="text-blue-300 hover:text-blue-100 transition-colors">
+          <Link href="/supportPages/about" className="text-blue-300 hover:text-blue-100 transition-colors">
+            About Us
+          </Link>
+          <Link href="/information" className="text-blue-300 hover:text-blue-100 transition-colors">
             About Us
           </Link>
         </div>
